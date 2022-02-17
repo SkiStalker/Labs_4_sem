@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>977</width>
-    <height>673</height>
+    <height>690</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,9 +18,9 @@
     <property name="geometry">
      <rect>
       <x>800</x>
-      <y>0</y>
+      <y>89</y>
       <width>175</width>
-      <height>650</height>
+      <height>581</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -28,6 +28,9 @@
       <width>150</width>
       <height>0</height>
      </size>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QGraphicsView" name="graphicsView">
@@ -37,9 +40,9 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>0</y>
+      <y>89</y>
       <width>800</width>
-      <height>650</height>
+      <height>601</height>
      </rect>
     </property>
     <property name="verticalScrollBarPolicy">
@@ -57,23 +60,118 @@
      </rectf>
     </property>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>977</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>File</string>
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>592</width>
+      <height>91</height>
+     </rect>
     </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Построить маршрут</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>Сгенерировать карту</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_3">
+       <property name="text">
+        <string>Установить стартовую точку</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_4">
+       <property name="text">
+        <string>Установить конечную точку</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
-   <addaction name="menuFile"/>
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>0</y>
+      <width>211</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="bottomMargin">
+      <number>15</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Текущий алгоритм поиска:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboBox">
+       <item>
+        <property name="text">
+         <string>А*</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Дейкстра</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
+  <action name="actionA">
+   <property name="text">
+    <string>A*</string>
+   </property>
+  </action>
+  <action name="actionDek">
+   <property name="text">
+    <string>Дейкстра</string>
+   </property>
+  </action>
+  <action name="findpathAction">
+   <property name="text">
+    <string>Сгенерировать карту</string>
+   </property>
+  </action>
+  <action name="genAction">
+   <property name="text">
+    <string>Построить маршрут</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>

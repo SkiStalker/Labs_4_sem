@@ -15,3 +15,6 @@
 #include <QRectF>
 #include <QPoint>
 #include <QPointF>
+#include <QException>
+#include <QDebug>
+
