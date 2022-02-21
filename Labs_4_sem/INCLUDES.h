@@ -17,4 +17,5 @@
 #include <QPointF>
 #include <QException>
 #include <QDebug>
+#include <QGraphicsSceneMouseEvent>
 

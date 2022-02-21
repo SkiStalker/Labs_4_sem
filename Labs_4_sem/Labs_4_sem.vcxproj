@@ -85,16 +85,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="RouteField.cpp" />
     <QtRcc Include="Dekstra.qrc" />
     <QtUic Include="Dekstra.ui" />
     <QtMoc Include="Dekstra.h" />
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="Dekstra.cpp" />
+    <ClCompile Include="FindRouteAlgo.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cell.h" />
+    <ClInclude Include="FindRouteAlgo.h" />
     <ClInclude Include="INCLUDES.h" />
+    <QtMoc Include="RouteField.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

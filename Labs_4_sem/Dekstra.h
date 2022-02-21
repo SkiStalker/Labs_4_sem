@@ -2,9 +2,8 @@
 
 
 #include "INCLUDES.h"
-#include "Cell.h"
 #include "ui_Dekstra.h"
-
+#include "RouteField.h"
 
 class Dekstra : public QMainWindow
 {
@@ -15,22 +14,23 @@ public:
     ~Dekstra();
 
 public slots:
-    void generateAction(bool b);
+    void pressfindRouteButton();
+    void pressgenMapButton();
+    void presssetStartPointButton();
+    void presssetEndPointButton();
 
-    void findPathAction(bool b);
 
-    void chooseAlgAAction(bool b);
 
-    void chooseAlgDeckstraAction(bool b);
 
 private:
+    int h_cells = 8;
+    int w_cells = 13;
+    Cell* startCell = nullptr;
 
-    int cur_algo = 0;
-
+    Cell* finishCell = nullptr;
     Ui::DekstraClass ui;
 
-    QGraphicsScene* field = nullptr;
-    QList<QList<Cell*>> cells;
+    RouteField* field = nullptr;
 
     void createFiled();
     void initField();

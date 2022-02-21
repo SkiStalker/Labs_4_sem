@@ -13,25 +13,36 @@ Dekstra::~Dekstra()
 {
 }
 
-void Dekstra::generateAction(bool b)
+void Dekstra::pressgenMapButton()
 {
-	qDebug() << "gen";
 }
 
-void Dekstra::findPathAction(bool b)
+void Dekstra::presssetStartPointButton()
 {
-	qDebug() << "find";
+	if (ui.setEndPointButton->isChecked())
+		ui.setEndPointButton->setChecked(false);
 }
 
-void Dekstra::chooseAlgAAction(bool b)
+void Dekstra::presssetEndPointButton()
 {
-	qDebug() << "choose A";
+	if (ui.setStartPointButton->isChecked())
+		ui.setStartPointButton->setChecked(false);
 }
 
-void Dekstra::chooseAlgDeckstraAction(bool b)
+void Dekstra::pressfindRouteButton()
 {
-	qDebug() << "choose Dek";
+	FindRouteAlgo::Algorithm alg_type;
+	if (!ui.comboBox->currentIndex())
+	{
+		alg_type = FindRouteAlgo::Algorithm::AStart;
+	}
+	else
+	{
+		alg_type = FindRouteAlgo::Algorithm::Dekstra;
+	}
+	field->startFindingRoute(alg_type);
 }
+
 
 void Dekstra::createFiled()
 {
@@ -44,44 +55,45 @@ void Dekstra::createFiled()
 
 void Dekstra::initField()
 {
-	field = new QGraphicsScene();
+	field = new RouteField(&ui);
 	field->setSceneRect(QRect(0, 0, ui.graphicsView->rect().width(), ui.graphicsView->rect().height()));
 	
 	ui.graphicsView->setScene(field);
 
-	connect(ui.findpathAction, &QAction::triggered, this, &Dekstra::findPathAction);
-	connect(ui.genAction, &QAction::triggered, this, &Dekstra::generateAction);
-	connect(ui.actionA, &QAction::triggered, this, &Dekstra::chooseAlgAAction);
-	connect(ui.actionDek, &QAction::triggered, this, &Dekstra::chooseAlgDeckstraAction);
+
+	connect(ui.findRouteButton, &QPushButton::pressed, this, &Dekstra::pressfindRouteButton);
+	connect(ui.genMapButton, &QPushButton::pressed, this, &Dekstra::pressgenMapButton);
+	connect(ui.setStartPointButton, &QPushButton::pressed, this, &Dekstra::presssetStartPointButton);
+	connect(ui.setEndPointButton, &QPushButton::pressed, this, &Dekstra::presssetEndPointButton);
 }
 
 void Dekstra::createCells()
 {
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < h_cells; i++)
 	{
-		cells.append(QList<Cell*>());
-		for (int j = 0; j < 13; j++)
+		field->cells.append(QList<Cell*>());
+		for (int j = 0; j < w_cells; j++)
 		{
-			Cell* c = new Cell();
+			Cell* c = new Cell(QPoint(j, i));
 			c->setRect(QRect(0, 0, Cell::sz, Cell::sz));
 			c->setPos(15 + j * Cell::sz, 15 + i * Cell::sz);
-			cells[i].append(c);
+			field->cells[i].append(c);
 			field->addItem(c);
 		}
 	}
-
-	cells[4][2]->setRouteStat(Cell::RouteStat::Start);
-	cells[4][10]->setRouteStat(Cell::RouteStat::Finish);
+	
+	field->setStartPoint(field->cells[4][2]);
+	field->setEndPoint(field->cells[4][w_cells - 2]);
 }
 
 void Dekstra::drawMarkup()
 {
-	for (int i = 0; i < 13; i++)
+	for (int i = 0; i < w_cells; i++)
 	{
 		QGraphicsTextItem* txth = new QGraphicsTextItem(QString::number(i));
 		field->addItem(txth);
 		txth->setPos(QPoint(15 + i*Cell::sz + Cell::sz / 2, -4));
-		if (i < 10)
+		if (i < h_cells)
 		{
 			QGraphicsTextItem* txtv = new QGraphicsTextItem(QString::number(i));
 			field->addItem(txtv);
@@ -90,5 +102,3 @@ void Dekstra::drawMarkup()
 	}
 
 }
-
-

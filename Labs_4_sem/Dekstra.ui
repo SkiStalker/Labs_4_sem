@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>977</width>
-    <height>690</height>
+    <height>614</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -40,9 +40,9 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>89</y>
+      <y>90</y>
       <width>800</width>
-      <height>601</height>
+      <height>520</height>
      </rect>
     </property>
     <property name="verticalScrollBarPolicy">
@@ -65,13 +65,13 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>592</width>
+      <width>593</width>
       <height>91</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="findRouteButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -84,14 +84,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="genMapButton">
        <property name="text">
         <string>Сгенерировать карту</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_3">
+      <widget class="QPushButton" name="setStartPointButton">
        <property name="text">
         <string>Установить стартовую точку</string>
        </property>
@@ -101,7 +101,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_4">
+      <widget class="QPushButton" name="setEndPointButton">
        <property name="text">
         <string>Установить конечную точку</string>
        </property>
