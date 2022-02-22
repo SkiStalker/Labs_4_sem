@@ -96,7 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cell.h" />
-    <ClInclude Include="FindRouteAlgo.h" />
+    <QtMoc Include="FindRouteAlgo.h" />
     <ClInclude Include="INCLUDES.h" />
     <QtMoc Include="RouteField.h" />
   </ItemGroup>

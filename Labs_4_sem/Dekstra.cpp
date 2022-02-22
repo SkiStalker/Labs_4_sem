@@ -84,6 +84,8 @@ void Dekstra::createCells()
 	
 	field->setStartPoint(field->cells[4][2]);
 	field->setEndPoint(field->cells[4][w_cells - 2]);
+
+	field->cells[4][8]->setType(Cell::Type::Wall);
 }
 
 void Dekstra::drawMarkup()

@@ -20,7 +20,8 @@ public:
     {
         Inactive,
         Active,
-        Processed
+        Processed,
+        Passed
     };
 
     enum class RouteStat
@@ -30,9 +31,9 @@ public:
         Finish
     };
 
-    enum class Considered
+    enum class Direction
     {
-        NotConsider,
+        NotDirected,
         Left,
         TopLeft,
         Top,
@@ -58,9 +59,9 @@ public:
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
 
-    void setConsidered(Considered consider);
+    void setDirection(Direction consider);
 
-    Considered getConsider() const;
+    Direction getDirection() const;
 
     const QPoint& getPosition() const;
 
@@ -80,18 +81,22 @@ public:
 
     int getWeight() const;
 
-private:
+    Cell* getParentCell() const;
 
+    void setParentCell(Cell* parent_cell);
+
+private:
+    bool in_route = false;
+    Cell* parent_cell = nullptr;
     int manhattan_distance = 0;
     int cur_route = 0;
     int cell_weight = 0;
 
     bool closed = false;
     QPoint _position;
-    bool is_passed = false;
     Type tp = Type::Asphalt;
     Status status = Status::Inactive;
     RouteStat route_stat = RouteStat::NotRoute;
-    Considered consider = Considered::NotConsider;
+    Direction direction = Direction::NotDirected;
 };
 

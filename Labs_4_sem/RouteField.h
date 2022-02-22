@@ -32,5 +32,10 @@ private:
     const Ui::DekstraClass* ui = nullptr;
     Cell* startPoint = nullptr;
     Cell* endPoint = nullptr;
+    FindRouteAlgo* curfindAlgo = nullptr;
+    QTimer* updateTimer = new QTimer(this);
+
+private slots:
+    void updateField();
 };
 

@@ -18,4 +18,11 @@
 #include <QException>
 #include <QDebug>
 #include <QGraphicsSceneMouseEvent>
+#include <QThread>
+#include <QMap>
+#include <QTimer>
+
+
+
+#include <Thread>
 
