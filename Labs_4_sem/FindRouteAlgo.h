@@ -10,6 +10,7 @@ public:
 	~FindRouteAlgo();
 	enum class Algorithm
 	{
+		None,
 		AStart,
 		Dekstra
 	};
@@ -23,6 +24,7 @@ protected:
 	Cell* start_point = nullptr;
 	Cell* finish_point = nullptr;
 	QMap<Cell*, QList<Cell*>> cellsGraph;
+	int calcRouteToCell(const Cell* start, const Cell* end);
 };
 
 
@@ -36,9 +38,8 @@ private:
 	int consideredPoint = 0;
 	QList<Cell*> open_list;
 	Cell* cur_point = nullptr;
-	void considerNearPoints(int i);
+	bool considerNearPoints(int i);
 	int findEvristicDistance(const Cell* start);
-	int calcRouteToCell(const Cell* start, const Cell* end);
 	Cell::Direction findDirection(const Cell* first, const Cell* second);
 };
 
@@ -48,4 +49,21 @@ public:
 	DekstraRouteAlgo(Cell* start_point, Cell* finish_point, QList<QList<Cell*>>& cells);
 	void findRoute() override;
 	bool isFinished() override;
+private:
+	void drawRoute(Cell* end, bool val);
+	struct DekstraRouteAlgoCell
+	{
+		DekstraRouteAlgoCell(Cell* cell_ptr, double prior);
+		DekstraRouteAlgoCell();
+		Cell* cell_ptr = nullptr;
+		double prior;
+		bool operator <(const DekstraRouteAlgoCell& right) const;
+	};
+	QList<Cell*> H;
+	QMap<Cell*, double> D;
+	std::vector	<DekstraRouteAlgoCell> Q;
+	int considerPoint;
+	Cell* v = nullptr;
+	DekstraRouteAlgoCell cur;
+	Cell* u = nullptr;
 };

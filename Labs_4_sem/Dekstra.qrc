@@ -1,4 +1,5 @@
 <RCC>
-    <qresource prefix="Dekstra">
+    <qresource prefix="/Dekstra">
+        <file>Images/Legend.png</file>
     </qresource>
 </RCC>

@@ -18,14 +18,23 @@ void AStartRouteAlgo::findRoute()
 	}
 	else if (consideredPoint < cellsGraph[cur_point].size())
 	{
-		considerNearPoints(consideredPoint);
-		consideredPoint++;
+		if (!considerNearPoints(consideredPoint))
+		{
+			consideredPoint++;
+			while (consideredPoint < cellsGraph[cur_point].size() && !considerNearPoints(consideredPoint))
+				consideredPoint++;
+		}
+		else
+		{
+			consideredPoint++;
+		}
 	}
 	else
 	{
 		cellsGraph[cur_point].last()->setStatus(Cell::Status::Inactive);
 		consideredPoint = 0;
 		cur_point->setStatus(Cell::Status::Inactive);
+		cur_point->setPassed(true);
 		int min_weight = open_list.first()->getWeight();
 		int min_ind = 0;
 		for (int i = 1; i < open_list.size(); i++)
@@ -45,7 +54,7 @@ bool AStartRouteAlgo::isFinished()
 	return cur_point == finish_point;
 }
 
-void AStartRouteAlgo::considerNearPoints(int i)
+bool AStartRouteAlgo::considerNearPoints(int i)
 {
 	if (i)
 		cellsGraph[cur_point][i - 1]->setStatus(Cell::Status::Inactive);
@@ -62,7 +71,7 @@ void AStartRouteAlgo::considerNearPoints(int i)
 
 			cur_cell->setManhattanDistance(findEvristicDistance(cur_cell) * 10);
 
-			cur_cell->setCurrentRoute(cur_point->getCurrentRoute() + calcRouteToCell(cur_cell, cur_point));
+			cur_cell->setCurrentRoute(cur_point->getCurrentRoute() + calcRouteToCell(cur_point, cur_cell));
 
 			cur_cell->setWeight(cur_cell->getManhattanDistance() + cur_cell->getCurrentRoute());
 
@@ -75,13 +84,15 @@ void AStartRouteAlgo::considerNearPoints(int i)
 			{
 				cur_cell->setParentCell(cur_point);
 				cur_cell->setDirection(findDirection(cur_point, cur_cell));
-				cur_cell->setCurrentRoute(cur_point->getCurrentRoute() + calcRouteToCell(cur_cell, cur_point));
+				cur_cell->setCurrentRoute(cur_point->getCurrentRoute() + calcRouteToCell(cur_point, cur_cell));
 
 				cur_cell->setWeight(cur_cell->getManhattanDistance() + cur_cell->getCurrentRoute());
 				cur_cell->update();
 			}
 		}
+		return true;
 	}
+	return false;
 }
 
 int AStartRouteAlgo::findEvristicDistance(const Cell* start)
@@ -104,10 +115,10 @@ int AStartRouteAlgo::findEvristicDistance(const Cell* start)
 	return dist;
 }
 
-int AStartRouteAlgo::calcRouteToCell(const Cell* start, const Cell* end)
+int FindRouteAlgo::calcRouteToCell(const Cell* start, const Cell* end)
 {
 	int dist = 0;
-	auto tp = start->getType();
+	auto tp = end->getType();
 
 	switch (tp)
 	{
@@ -190,20 +201,103 @@ Cell::Direction AStartRouteAlgo::findDirection(const Cell* first, const Cell* se
 
 
 
-
-
 DekstraRouteAlgo::DekstraRouteAlgo(Cell* start_point, Cell* finish_point, QList<QList<Cell*>>& cells) : FindRouteAlgo(start_point, finish_point, cells)
 {
+	for (auto line : cells)
+		for (auto cell : line)
+		{
+			if (cell->getPosition() == start_point->getPosition())
+			{
+				D[cell] = 0;
+				Q.push_back(DekstraRouteAlgoCell(cell, 0));
+			}
+			else if(cell->getType() != Cell::Type::Wall)
+			{
+				D[cell] = INFINITY;
+				Q.push_back(DekstraRouteAlgoCell(cell, INFINITY));
+			}
+		}
+	std::make_heap(Q.begin(), Q.end());
+	considerPoint = 0;
 }
 
 void DekstraRouteAlgo::findRoute()
 {
+	if (!considerPoint)
+	{
+		//if(v)
+			//drawRoute(v, false);
 
+		cur = Q.front();
+		v = cur.cell_ptr;
+		std::pop_heap(Q.begin(), Q.end());
+		Q.pop_back();
+		H.append(v);
+		v->update();
+
+		//drawRoute(v, true);
+	}
+	if (considerPoint < cellsGraph[v].size())
+	{
+		if (considerPoint)
+			cellsGraph[v][considerPoint - 1]->setStatus(Cell::Status::Inactive);
+
+		if (u)
+			drawRoute(u, false);
+
+
+		u = cellsGraph[v][considerPoint];
+		if (u->getType() != Cell::Type::Wall)
+		{
+			if (!H.contains(u))
+			{
+				int route = calcRouteToCell(v, u);
+				if (D[v] + route < D[u])
+				{
+					D[u] = D[v] + route;
+					for (auto& q : Q)
+					{
+						if (q.cell_ptr == u)
+						{
+							q.prior = D[u];
+							break;
+						}
+					}
+					std::make_heap(Q.begin(), Q.end());
+					u->setParentCell(v);
+				}
+			}
+			drawRoute(u, true);
+		}
+		considerPoint++;
+	}
+	else
+	{
+		drawRoute(u, false);
+		v->setStatus(Cell::Status::Inactive);
+		v->setPassed(true);
+		v->update();
+		cellsGraph[v].last()->setStatus(Cell::Status::Inactive);
+		cellsGraph[v].last()->update();
+		considerPoint = 0;
+	}
 }
 
 bool DekstraRouteAlgo::isFinished()
 {
-	return false;
+	return v == finish_point;
+}
+
+void DekstraRouteAlgo::drawRoute(Cell* end, bool val)
+{
+	while (end->getParentCell())
+	{
+		end = end->getParentCell();
+		end->setInRoute(val);
+		end->update();
+	}
+	end->setInRoute(val);
+	end->update();
 }
 
 FindRouteAlgo::FindRouteAlgo(Cell* start_point, Cell* finish_point, QList<QList<Cell*>>& cells) :start_point(start_point), finish_point(finish_point)
@@ -304,4 +398,15 @@ FindRouteAlgo::~FindRouteAlgo()
 {
 }
 
+DekstraRouteAlgo::DekstraRouteAlgoCell::DekstraRouteAlgoCell(Cell* cell_ptr, double prior) : cell_ptr(cell_ptr), prior(prior)
+{
+}
 
+DekstraRouteAlgo::DekstraRouteAlgoCell::DekstraRouteAlgoCell() : cell_ptr(nullptr), prior(0)
+{
+}
+
+bool DekstraRouteAlgo::DekstraRouteAlgoCell::operator<(const DekstraRouteAlgoCell& right) const
+{
+	return prior > right.prior;
+}

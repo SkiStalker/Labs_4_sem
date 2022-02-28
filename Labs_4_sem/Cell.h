@@ -20,8 +20,7 @@ public:
     {
         Inactive,
         Active,
-        Processed,
-        Passed
+        Processed
     };
 
     enum class RouteStat
@@ -85,14 +84,24 @@ public:
 
     void setParentCell(Cell* parent_cell);
 
+    void setInRoute(bool val);
+
+    bool getInRoute() const;
+
+    void setPassed(bool val);
+
+    bool getPassed() const;
+
+    void clearCell();
+
 private:
-    bool in_route = false;
     Cell* parent_cell = nullptr;
     int manhattan_distance = 0;
     int cur_route = 0;
     int cell_weight = 0;
-
+    bool in_route = false;
     bool closed = false;
+    bool passed = false;
     QPoint _position;
     Type tp = Type::Asphalt;
     Status status = Status::Inactive;

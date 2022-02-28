@@ -42,6 +42,15 @@ void Cell::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWid
 	default:
 		break;
 	}
+	if (passed)
+	{
+		if (clr.red())
+			clr.setRed(clr.red() * 0.5);
+		if (clr.green())
+			clr.setGreen(clr.green() * 0.5);
+		if (clr.blue())
+			clr.setBlue(clr.blue() * 0.5);
+	}
 	painter->setBrush(QBrush(clr));
 	painter->drawRect(QRect(0, 0, sz, sz));
 
@@ -49,18 +58,20 @@ void Cell::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWid
 	{
 		if (status == Status::Active)
 		{
-			clr = QColor("pink");
-		}
-		else if(status == Status::Processed)
-		{
-			clr = QColor("red");
+			clr = QColor("white");
 		}
 		else
 		{
-			clr = QColor(0, 255,100);
+			clr = QColor(89, 0, 243);
 		}
 		painter->setBrush(QBrush(clr));
-		painter->drawEllipse(QRect(sz/2 - sz/4, sz/2 - sz/4, sz/2, sz/2));
+		painter->drawEllipse(QRect(sz / 2 - sz / 4, sz / 2 - sz / 4, sz / 2, sz / 2));
+	}
+
+	if (in_route)
+	{
+		painter->setBrush(QBrush(QColor(0,255,0)));
+		painter->drawEllipse(QRect(sz / 2 - sz / 4, sz / 2 - sz / 4, sz / 2, sz / 2));
 	}
 
 	if (route_stat != RouteStat::NotRoute)
@@ -78,7 +89,8 @@ void Cell::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWid
 		painter->save();
 		fnt.setPointSizeF(20);
 		painter->setFont(fnt);
-		painter->drawText(QPoint(sz / 2 - 7 , sz / 2 + 7), txt);
+		painter->setPen(QColor("red"));
+		painter->drawText(QPoint(sz / 2 - 7, sz / 2 + 7), txt);
 		painter->restore();
 	}
 
@@ -129,14 +141,14 @@ void Cell::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWid
 
 		case Cell::Direction::BottomLeft:
 			painter->drawPolygon(QPolygon({ QPoint(sz - 14, 16) , QPoint(sz - 16, 14), QPoint(14, sz - 16), QPoint(16, sz - 14) }));
-			painter->drawPolygon(QPolygon({ QPoint(10, sz - 10), QPoint(10, sz - 20), QPoint(20,sz-  10) }));
+			painter->drawPolygon(QPolygon({ QPoint(10, sz - 10), QPoint(10, sz - 20), QPoint(20,sz - 10) }));
 			break;
 
 		default:
 			break;
 		}
 
-		painter->setPen(QColor("green"));
+		painter->setPen(QColor(0,255,0));
 		painter->drawText(QPoint(2, sz - 1), QString::number(cur_route));
 
 		painter->setPen(QColor("blue"));
@@ -212,6 +224,39 @@ Cell* Cell::getParentCell() const
 void Cell::setParentCell(Cell* parent_cell)
 {
 	this->parent_cell = parent_cell;
+}
+
+void Cell::setInRoute(bool val)
+{
+	in_route = val;
+}
+
+bool Cell::getInRoute() const
+{
+	return in_route;
+}
+
+void Cell::setPassed(bool val)
+{
+	passed = val;
+}
+
+bool Cell::getPassed() const
+{
+	return passed;
+}
+
+void Cell::clearCell()
+{
+	parent_cell = nullptr;
+	manhattan_distance = 0;
+	cur_route = 0;
+	cell_weight = 0;
+	in_route = false;
+	closed = false;
+	passed = false;
+	status = Status::Inactive;
+	direction = Direction::NotDirected;
 }
 
 void Cell::setStatus(const Status& st)
