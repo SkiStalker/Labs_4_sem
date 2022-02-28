@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>977</width>
+    <width>973</width>
     <height>614</height>
    </rect>
   </property>
@@ -18,9 +18,9 @@
     <property name="geometry">
      <rect>
       <x>800</x>
-      <y>89</y>
-      <width>175</width>
-      <height>581</height>
+      <y>90</y>
+      <width>170</width>
+      <height>520</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -31,6 +31,12 @@
     </property>
     <property name="mouseTracking">
      <bool>true</bool>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background : url(:/Dekstra/Images/Legend.png);</string>
     </property>
    </widget>
    <widget class="QGraphicsView" name="graphicsView">
@@ -65,89 +71,167 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>593</width>
+      <width>971</width>
       <height>91</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="findRouteButton">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="leftMargin">
+        <number>5</number>
        </property>
-       <property name="text">
-        <string>Построить маршрут</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="genMapButton">
-       <property name="text">
-        <string>Сгенерировать карту</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="setStartPointButton">
-       <property name="text">
-        <string>Установить стартовую точку</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="setEndPointButton">
-       <property name="text">
-        <string>Установить конечную точку</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="verticalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>0</y>
-      <width>211</width>
-      <height>91</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <property name="bottomMargin">
-      <number>15</number>
-     </property>
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Текущий алгоритм поиска:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="comboBox">
        <item>
-        <property name="text">
-         <string>А*</string>
-        </property>
+        <widget class="QPushButton" name="genMapButton">
+         <property name="text">
+          <string>Сгенерировать карту</string>
+         </property>
+        </widget>
        </item>
        <item>
-        <property name="text">
-         <string>Дейкстра</string>
-        </property>
+        <widget class="QPushButton" name="cleanMapButton">
+         <property name="text">
+          <string>Очистить карту</string>
+         </property>
+        </widget>
        </item>
-      </widget>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QPushButton" name="findRouteButton">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Начать строить маршрут</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pauseFindRouteButton">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Остановить построение маршрута</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QPushButton" name="setStartPointButton">
+         <property name="text">
+          <string>Установить стартовую точку</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="setEndPointButton">
+         <property name="text">
+          <string>Установить конечную точку</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <property name="rightMargin">
+        <number>5</number>
+       </property>
+       <property name="bottomMargin">
+        <number>13</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Текущий алгоритм поиска:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox">
+         <item>
+          <property name="text">
+           <string>А*</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Дейкстра</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="rightMargin">
+        <number>15</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Задержка между итерациями 
+алгоритма</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <property name="bottomMargin">
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QSpinBox" name="spinBox">
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::UpDownArrows</enum>
+           </property>
+           <property name="suffix">
+            <string/>
+           </property>
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>10000</number>
+           </property>
+           <property name="value">
+            <number>100</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>мс</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
      </item>
     </layout>
    </widget>

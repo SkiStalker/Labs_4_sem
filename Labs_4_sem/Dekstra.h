@@ -14,20 +14,35 @@ public:
     ~Dekstra();
 
 public slots:
-    void pressfindRouteButton();
-    void pressgenMapButton();
-    void presssetStartPointButton();
-    void presssetEndPointButton();
+    void pressFindRouteButton();
+    void pressGenMapButton();
+    void pressSetStartPointButton();
+    void pressSetEndPointButton();
+    void pressClearMapButton();
+    void pressPauseFindRouteButton();
+
+    void spinBoxChangingValue();
 
 
 
 
 private:
+    QList<QList<int>> map1 = { {1,1,3,3,3,1,1,1,1,1,1,1,1},
+                    {1,1,3,3,3,1,1,1,2,2,1,1,1},
+                    {1,1,1,1,1,1,1,0,1,1,1,1,1},
+                    {1,1,1,1,1,1,1,0,1,1,1,1,1},
+                    {1,1,1,1,1,1,1,0,1,1,1,1,1},
+                    {1,2,2,1,1,1,1,0,1,1,3,3,1},
+                    {1,1,1,1,3,4,1,1,1,2,1,1,1},
+                    {1,1,1,1,3,4,1,1,1,2,1,1,1}
+    };
+    void changeRunning(bool stat);
+
+    FindRouteAlgo::Algorithm alg_type = FindRouteAlgo::Algorithm::None;
     int h_cells = 8;
     int w_cells = 13;
     Cell* startCell = nullptr;
 
-    Cell* finishCell = nullptr;
     Ui::DekstraClass ui;
 
     RouteField* field = nullptr;

@@ -57,42 +57,72 @@ void RouteField::mousePressEvent(QGraphicsSceneMouseEvent* ev)
 	}
 }
 
-void RouteField::startFindingRoute(FindRouteAlgo::Algorithm algorithm_type)
+void RouteField::startFindingRoute(FindRouteAlgo::Algorithm algorithm_type, int delay)
 {
-	switch (algorithm_type)
+	if (!curfindAlgo)
 	{
-	case FindRouteAlgo::Algorithm::AStart:
-		curfindAlgo = new AStartRouteAlgo(startPoint, endPoint, cells);
-		break;
-	case FindRouteAlgo::Algorithm::Dekstra:
-		curfindAlgo = new DekstraRouteAlgo(startPoint, endPoint, cells);
-		break;
-	default:
-		// TODO : throw exception();
-		break;
+		switch (algorithm_type)
+		{
+		case FindRouteAlgo::Algorithm::AStart:
+			curfindAlgo = new AStartRouteAlgo(startPoint, endPoint, cells);
+			break;
+		case FindRouteAlgo::Algorithm::Dekstra:
+			curfindAlgo = new DekstraRouteAlgo(startPoint, endPoint, cells);
+			break;
+		default:
+			// TODO : throw exception();
+			break;
+		}
 	}
-	updateTimer->start();
+	updateTimer->start(delay);
+}
+
+void RouteField::pauseFindingRoute()
+{
+	if (updateTimer)
+		updateTimer->stop();
+}
+
+void RouteField::clearField()
+{
+	for (auto line : cells)
+		for (auto cell : line)
+			cell->clearCell();
+
+	delete curfindAlgo;
+	curfindAlgo = nullptr;
 }
 
 
 void RouteField::updateField()
 {
+	if (!curfindAlgo)
+		if (updateTimer->isActive())
+		{
+			updateTimer->stop();
+			return;
+		}
+
+
+
+	if (curfindAlgo->isFinished())
+		return;
+
+
 	curfindAlgo->findRoute();
 	update();
 	QApplication::processEvents();
-	QThread::currentThread()->usleep(1000000 / 10);
 	if (curfindAlgo->isFinished())
 	{
+		endPoint->setPassed(true);
 		updateTimer->stop();
-		delete curfindAlgo;
-		curfindAlgo = nullptr;
 		auto tmp_cell = endPoint;
 		while (tmp_cell != startPoint)
 		{
-			tmp_cell->setStatus(Cell::Status::Passed);
+			tmp_cell->setInRoute(true);
 			tmp_cell = tmp_cell->getParentCell();
 		}
-		tmp_cell->setStatus(Cell::Status::Passed);
+		tmp_cell->setInRoute(true);
 		update();
 	}
 }

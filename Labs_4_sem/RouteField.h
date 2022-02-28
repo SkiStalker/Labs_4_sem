@@ -26,7 +26,11 @@ public:
 
     void mousePressEvent(QGraphicsSceneMouseEvent* ev) override;
 
-    void startFindingRoute(FindRouteAlgo::Algorithm algorithm_type);
+    void startFindingRoute(FindRouteAlgo::Algorithm algorithm_type, int delay);
+
+    void pauseFindingRoute();
+
+    void clearField();
 
 private:
     const Ui::DekstraClass* ui = nullptr;

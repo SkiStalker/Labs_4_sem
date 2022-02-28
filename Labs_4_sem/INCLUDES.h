@@ -23,6 +23,11 @@
 #include <QTimer>
 
 
+#include <queue>
+#include <vector>
+#include <functional>
+#include <deque>
+
 
 #include <Thread>
 
