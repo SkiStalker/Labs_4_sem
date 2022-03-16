@@ -1,30 +1,29 @@
 #pragma once
+#include "Malloc.h"
 #include <vector>
 #include <string>
 #include <regex>
 #include <iostream>
+#include <map>
+#include <string>
+#include <exception>
 
 using namespace std;
 
 class Interpreter
 {
-public:
-	void interpret(const vector<string>& lines)
+private:
+	struct Var
 	{
-		for (auto line : lines)
-		{
-			cout << line << endl;
+		void* ptr = nullptr;
+		int refs = 0;
+	};
+	map<string, Var*> vars;
+	int mallocCnt = 0;
+public:
+	int getMallocCount() const;
+	bool tryDeleteObject(map<string, Var*>::iterator var);
 
-			cmatch res;
-			regex regular("[a-zA-Z]+\\d*=alloc\\(([0-9]\\d*)\\)");
-			if (regex_search(line.c_str(), res,
-				regular))
-			{
-				cout << res[0] << " " << res[1] << endl;
-			}
-		}
-	}
-
-
+	void interpret(const vector<string>& lines);
 };
 
