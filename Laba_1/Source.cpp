@@ -72,5 +72,7 @@ int main(int argc, char* argv[])
 	cout << "Maximum free block size = " << maxFreeMem << endl;
 	cout << "Allocated memory blocks = " << inter.getMallocCount() << endl;
 	getchar();
+
+
 	return 0;
 }
