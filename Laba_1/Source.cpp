@@ -40,5 +40,7 @@ int main()
 	cout << "All free memory = " << allFreeSpace << endl;
 	cout << "Max free block size = " << maxFreeSpace << endl;
 	getchar();
+
+
 	return 0;
 }
