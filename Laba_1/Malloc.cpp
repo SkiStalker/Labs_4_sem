@@ -25,9 +25,9 @@ entity* new_entity(size_t size, entity* pre_best)
 		{
 			if (!best || cur->size < best->size)
 			{
-			best = cur;
-			pre_best = pre_cur;
-		}
+				best = cur;
+				pre_best = pre_cur;
+			}
 		}
 		pre_cur = cur;
 		cur = cur->next;
@@ -51,20 +51,10 @@ void w_free(void* ptr)
 		}
 		else
 		{
-	u8* start = (u8*)ptr - HEADER;
-
-	entity* Q = nullptr;
-	entity* P = nullptr;
-
-	P = &LIST[IN_USE - 1];
-
-	while (!(!P->ptr || P->ptr > start))
-	{
 			Q = P;
 			P = Q->next;
 		}
 	}
-
 	bool mergetop = true;
 
 	if (start + *start == P->ptr)
@@ -77,8 +67,6 @@ void w_free(void* ptr)
 		mergetop = false;
 	}
 
-
-	bool mergebot = false;
 
 	bool mergebot = true;
 	if (Q && Q->ptr + Q->size == start)
@@ -94,11 +82,10 @@ void w_free(void* ptr)
 	{
 		Q->size += P->size;
 		removeNextEntity(Q);
-
 	}
 	else if (!mergebot && !mergetop)
 	{
-		entity* cur = &LIST[IN_USE];
+		entity* cur = new entity();
 		cur->ptr = start;
 		cur->size = *start;
 		cur->next = P;

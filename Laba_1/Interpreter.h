@@ -20,7 +20,6 @@ private:
 		int refs;
 	};
 	map<string, Var*> vars;
-
 	bool tryRemoveVar(map<string, Var*>::iterator findVar)
 	{
 		findVar->second->refs--;
