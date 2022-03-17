@@ -36,41 +36,40 @@ int main(int argc, char* argv[])
 	}
 
 	vector<string> lines;
-
-	for (int i = 1; i < argc; i++)
-	{
-		appendLinesFromFile(string(argv[i]), lines);
-	}
-
+	lines.push_back("var1=alloc(12);");
+	lines.push_back("var2=var1;");
+	lines.push_back("dealloc(var2);");
+	lines.push_back("dealloc(var1);");
 	Interpreter inter;
 	inter.interpret(lines);
 
-	int allFreeMem = 0;
-	int maxFreeMem = 0;
+	entity* curFreeBlock = _LIST;
+	int maxFreeSpace = 0;
+	int allFreeSpace = 0;
+	cout << endl << "Memory view : " << endl;
 	for (int i = 0; i < HEAP_SIZE; i++)
 	{
-		auto curFreeBlock = LIST[IN_USE - 1];
-		if (&vm.heap[i] == curFreeBlock.ptr)
+		if (curFreeBlock && &vm.heap[i] == curFreeBlock->ptr)
 		{
-			allFreeMem += curFreeBlock.size;
-			if (curFreeBlock.size > maxFreeMem)
-				maxFreeMem = curFreeBlock.size;
-
-			for (int j = 0; j < curFreeBlock.size; j++)
+			for (int j = 0; j < curFreeBlock->size; j++)
 			{
 				cout << "_";
 			}
-			i += curFreeBlock.size;
-			IN_USE--;
+			i += curFreeBlock->size;
+			allFreeSpace += curFreeBlock->size;
+			if (curFreeBlock->size > maxFreeSpace)
+				maxFreeSpace = curFreeBlock->size;
+			curFreeBlock = curFreeBlock->next;
 		}
 		else
 		{
 			cout << "*";
 		}
 	}
-	cout << endl << "Free memory size = " << allFreeMem << endl;
-	cout << "Maximum free block size = " << maxFreeMem << endl;
-	cout << "Allocated memory blocks = " << inter.getMallocCount() << endl;
+
+	cout << endl << endl << "Allocated blocks = " << inter.getAllocated() << endl;
+	cout << "All free memory = " << allFreeSpace << endl;
+	cout << "Max free block size = " << maxFreeSpace << endl;
 	getchar();
 
 

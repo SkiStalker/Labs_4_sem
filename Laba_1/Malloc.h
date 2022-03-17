@@ -12,24 +12,33 @@ extern u16 IN_USE;
 
 struct virtual_memory
 {
-	u8 heap[HEAP_SIZE];
+	u8* heap;
 };
+	u8 heap[HEAP_SIZE];
 
 struct entity
+{
+typedef struct entity
 {
 	u8* ptr;
 	int size;
 	entity* next;
 };
 
+extern entity* _LIST;
+void addFirstEntity(u8* ptr, int size);
 
-extern virtual_memory vm;
-extern entity LIST[];
-
+void addNextEntity(u8* ptr, int size, entity* previous);
+	printf("Entities in use:[%d]\n", (sizeof(LIST) / sizeof(LIST[0]) - IN_USE));
+void removeNextEntity(entity* cur);
+}
 entity* new_entity(size_t size, entity* pre_best);
 
-void moveList(entity* entry);
-
 void* w_malloc(size_t size);
+
+void w_free(void* ptr);
+
+}
+
 
 void w_free(void* ptr);

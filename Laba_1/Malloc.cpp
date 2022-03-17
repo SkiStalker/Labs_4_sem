@@ -1,34 +1,33 @@
 #include "Malloc.h"
 
-entity LIST[HEAP_SIZE];
-u16 IN_USE = 0;
+u16 IN_USE;
+entity* _LIST = nullptr;
 virtual_memory vm;
+
 
 entity* new_entity(size_t size, entity* pre_best)
 {
-	if (LIST[0].ptr == NULL && LIST[0].size == 0)
+	if (!_LIST)
 	{
-
-		LIST[0].ptr = vm.heap;
-		LIST[0].size = HEAP_SIZE;
-		IN_USE++;
+		vm.heap = new u8[HEAP_SIZE];
+		_LIST = new entity();
+		_LIST->ptr = vm.heap;
+		_LIST->size = HEAP_SIZE;
 	}
 
-
-	entity* best = nullptr;
-	entity* cur = &LIST[IN_USE - 1];
+	entity* best = _LIST;
+	entity* cur = _LIST;
 	entity* pre_cur = nullptr;
 
-
-	for (unsigned i = 0; i < IN_USE; i++)
+	while (cur)
 	{
-		if (cur->size >= size)
+		if (cur->size >= size && cur->size < best->size)
 		{
 			if (!best || cur->size < best->size)
 			{
-				best = cur;
-				pre_best = pre_cur;
-			}
+			best = cur;
+			pre_best = pre_cur;
+		}
 		}
 		pre_cur = cur;
 		cur = cur->next;
@@ -37,50 +36,21 @@ entity* new_entity(size_t size, entity* pre_best)
 	return best;
 }
 
-void moveList(entity* entry)
-{
-	int ind = (entry - LIST) / sizeof(entity);
-	for (int i = ind; i < IN_USE - 1; i++)
-	{
-		LIST[ind] = LIST[ind + 1];
-	}
-	entity* last = &LIST[IN_USE - 1];
-	last->ptr = nullptr;
-	last->size = 0;
-	last->next = nullptr;
-	IN_USE--;
-}
-
-void* w_malloc(size_t size)
-{
-	size += HEADER;
-
-	entity* pre_e = nullptr;
-
-	entity* e = new_entity(size, pre_e);
-
-	u8* start = e->ptr;
-	u8* user_ptr = start + HEADER;
-
-	*start = size;
-
-	e->ptr += size;
-	e->size -= size;
-
-	if (!e->size)
-	{
-		if (pre_e)
-		{
-			pre_e->next = e->next;
-			moveList(e);
-		}
-	}
-
-	return user_ptr;
-}
-
 void w_free(void* ptr)
 {
+	u8* start = (u8*)ptr - HEADER;
+
+	entity* Q = nullptr;
+	entity* P = _LIST;
+
+	while (true)
+	{
+		if (!P->ptr || P->ptr > start)
+		{
+			break;
+		}
+		else
+		{
 	u8* start = (u8*)ptr - HEADER;
 
 	entity* Q = nullptr;
@@ -90,12 +60,13 @@ void w_free(void* ptr)
 
 	while (!(!P->ptr || P->ptr > start))
 	{
-		Q = P;
-		P = Q->next;
+			Q = P;
+			P = Q->next;
+		}
 	}
 
-
 	bool mergetop = true;
+
 	if (start + *start == P->ptr)
 	{
 		P->ptr = start;
@@ -107,6 +78,8 @@ void w_free(void* ptr)
 	}
 
 
+	bool mergebot = false;
+
 	bool mergebot = true;
 	if (Q && Q->ptr + Q->size == start)
 	{
@@ -117,21 +90,83 @@ void w_free(void* ptr)
 		mergebot = false;
 	}
 
-	if (!mergetop && !mergebot)
+	if (mergebot && mergetop)
+	{
+		Q->size += P->size;
+		removeNextEntity(Q);
+
+	}
+	else if (!mergebot && !mergetop)
 	{
 		entity* cur = &LIST[IN_USE];
 		cur->ptr = start;
 		cur->size = *start;
 		cur->next = P;
 		if (Q)
-			Q->next = cur;
-
-		IN_USE++;
+		{
+			addNextEntity(start, *start, Q);
+		}
+		else
+		{
+			addFirstEntity(start, *start);
+		}
 	}
-	else if (mergetop && mergebot)
+}
+
+void* w_malloc(size_t size)
+{
+	size += HEADER;
+
+	entity* pre_best = nullptr;
+
+	entity* e = new_entity(size, pre_best);
+
+	u8* start = e->ptr;
+	u8* user_ptr = start + HEADER;
+
+	*start = size;
+
+	e->ptr += size;
+	e->size -= size;
+
+	if (!e->size)
 	{
-		Q->size += (P->size - *start);
-		moveList(P);
+		if (pre_best)
+		{
+			pre_best->next = e->next;
+			delete e;
+		}
+		else
+		{
+			//
+		}
 	}
+	return user_ptr;
+}
 
+void addFirstEntity(u8* ptr, int size)
+{
+	auto newFreeBlock = new entity();
+	newFreeBlock->ptr = ptr;
+	newFreeBlock->size = size;
+	entity* t = _LIST;
+	_LIST = newFreeBlock;
+	_LIST->next = t;
+}
+
+void addNextEntity(u8* ptr, int size, entity* previous)
+{
+	entity* t = new entity();
+	t->ptr = ptr;
+	t->size = size;
+	t->next = previous->next;
+	previous->next = t;
+}
+
+
+void removeNextEntity(entity* cur)
+{
+	entity* t = cur->next;
+	cur->next = cur->next->next;
+	delete t;
 }
