@@ -14,7 +14,7 @@ class Interpreter
 private:
 	int memsAloocated = 0;
 	struct Var
-	{ 
+	{
 		void* ptr;
 		int refs;
 	};

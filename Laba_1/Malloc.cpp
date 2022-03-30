@@ -1,33 +1,36 @@
 #include "Malloc.h"
 
 u16 IN_USE;
+int N = HEAP_SIZE;
 entity* _LIST = nullptr;
 virtual_memory vm;
 
+void setHeapSize(unsigned int size)
+{
+	N = size;
+}
 
 entity* new_entity(size_t size, entity* pre_best)
 {
 	if (!_LIST)
 	{
-		vm.heap = new u8[HEAP_SIZE];
+		vm.heap = new u8[N];
 		_LIST = new entity();
 		_LIST->ptr = vm.heap;
 		_LIST->size = HEAP_SIZE;
 	}
 
-	entity* best = _LIST;
+	entity* best = nullptr;
 	entity* cur = _LIST;
 	entity* pre_cur = nullptr;
 
 	while (cur)
 	{
-		if (cur->size >= size && cur->size < best->size)
+		if (cur->size >= size)
 		{
-			if (!best || cur->size < best->size)
-			{
-				best = cur;
-				pre_best = pre_cur;
-			}
+			best = cur;
+			pre_best = pre_cur;
+			return best;
 		}
 		pre_cur = cur;
 		cur = cur->next;
@@ -71,7 +74,8 @@ void w_free(void* ptr)
 	bool mergebot = true;
 	if (Q && Q->ptr + Q->size == start)
 	{
-		Q->size += *start;
+		if (!mergetop)
+			Q->size += *start;
 	}
 	else
 	{

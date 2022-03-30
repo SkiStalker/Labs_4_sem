@@ -9,6 +9,7 @@
 #define HEADER 4
 
 extern u16 IN_USE;
+extern int N;
 
 struct virtual_memory
 {
@@ -26,6 +27,7 @@ struct entity
 extern virtual_memory vm;
 extern entity* _LIST;
 
+void setHeapSize(unsigned int size);
 
 void addFirstEntity(u8* ptr, int size);
 

@@ -10,7 +10,7 @@ int errorMsg()
 	exit(0);
 }
 
-void appendLinesFromFile(const string fileName, vector<string> & lines)
+void appendLinesFromFile(const string fileName, vector<string>& lines)
 {
 	ifstream in(fileName);
 
@@ -29,21 +29,10 @@ void appendLinesFromFile(const string fileName, vector<string> & lines)
 		if (in.peek() == ';')
 			buf += in.get();
 
-		if(buf.back() != EOF)
+		if (buf.back() != EOF)
 			lines.push_back(buf);
 	}
 	in.close();
-}
-
-void clear()
-{
-	delete vm.heap;
-	while (_LIST)
-	{
-		auto t = _LIST;
-		_LIST = _LIST->next;
-		delete t;
-	}
 }
 
 int main(int argc, char* argv[])
@@ -54,7 +43,7 @@ int main(int argc, char* argv[])
 	}
 
 	vector<string> lines;
-	
+
 	for (int i = 1; i < argc; i++)
 	{
 		appendLinesFromFile(argv[i], lines);
@@ -63,28 +52,26 @@ int main(int argc, char* argv[])
 	Interpreter inter;
 	inter.interpret(lines);
 
-	entity* curFreeBlock = _LIST;
 	int maxFreeSpace = 0;
 	int allFreeSpace = 0;
 	cout << endl << "Memory view : " << endl;
-	for (int i = 0; i < HEAP_SIZE; i++)
+	char* cur = heap;
+	while (cur != heap + N)
 	{
-		if (curFreeBlock && &vm.heap[i] == curFreeBlock->ptr)
+		bool is_free = getFree(cur);
+		int sz = getSize(cur);
+		if (is_free)
 		{
-			for (int j = 0; j < curFreeBlock->size; j++)
-			{
-				cout << "_";
-			}
-			i += curFreeBlock->size;
-			allFreeSpace += curFreeBlock->size;
-			if (curFreeBlock->size > maxFreeSpace)
-				maxFreeSpace = curFreeBlock->size;
-			curFreeBlock = curFreeBlock->next;
+			allFreeSpace += sz;
+			if (sz > maxFreeSpace)
+				maxFreeSpace = sz;
 		}
-		else
+		for (int i = 0; i < sz; i++)
 		{
-			cout << "*";
+			cout << (is_free ? "_" : "*");
 		}
+
+		cur += sz;
 	}
 
 	cout << endl << endl << "Allocated blocks = " << inter.getAllocated() << endl;
@@ -92,6 +79,5 @@ int main(int argc, char* argv[])
 	cout << "Max free block size = " << maxFreeSpace << endl;
 	getchar();
 
-	clear();
 	return 0;
 }

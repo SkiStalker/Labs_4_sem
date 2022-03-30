@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{9fc965db-b689-485e-aaf4-f5fbe38523e7}</ProjectGuid>
-    <RootNamespace>Laba1</RootNamespace>
+    <ProjectGuid>{b28b2e4c-87d0-4a6c-ae64-4f5a2f5e688f}</ProjectGuid>
+    <RootNamespace>Laba12</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -31,6 +31,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <EnableASAN>false</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -139,13 +140,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Interpreter.h" />
-    <ClInclude Include="Malloc.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="Interpreter.cpp" />
     <ClCompile Include="Malloc.cpp" />
     <ClCompile Include="Source.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Interpreter.h" />
+    <ClInclude Include="Malloc.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="in.txt" />

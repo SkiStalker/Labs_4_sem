@@ -1,0 +1,5 @@
+var1=alloc(12);
+var2=alloc(13);
+var3=alloc(14);
+dealloc(var1);
+dealloc(var3);
