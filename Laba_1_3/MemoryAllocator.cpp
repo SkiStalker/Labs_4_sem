@@ -35,7 +35,7 @@ int MemoryAllocator::getBlockNumber(uint pow)
 		auto& last = freeBlocks[N - 1];
 		last = heap;
 		setTag(last, true);
-		setKVal(last, N-1);
+		setKVal(last, N - 1);
 		setLinkB(last, nullptr);
 		setLinkF(last, nullptr);
 	}
@@ -54,7 +54,7 @@ int MemoryAllocator::getBlockNumber(uint pow)
 
 void* MemoryAllocator::w_alloc(uint size)
 {
-	uint newSize = size + 1 + 4 + 4;
+	uint newSize = size + sizeof(char) + sizeof(int*) * 2;
 
 	int k = getNormalizePow(newSize);
 	int j = getBlockNumber(k);
@@ -63,7 +63,7 @@ void* MemoryAllocator::w_alloc(uint size)
 	while (j != k)
 	{
 		j--;
-		char* P = L + (1 << j);
+		char* P = L + (1ll << j);
 		setTag(P, true);
 		setKVal(P, j);
 		setLinkB(P, nullptr);
@@ -71,12 +71,12 @@ void* MemoryAllocator::w_alloc(uint size)
 		freeBlocks[j] = P;
 	}
 	setKVal(L, k);
-	return L + 1 + 4 + 4;
+	return L + sizeof(char) + sizeof(int*) * 2;
 }
 
 void MemoryAllocator::w_free(void* ptr)
 {
-	char* L = (char*)ptr - 9;
+	char* L = (char*)ptr - sizeof(char) - sizeof(int*) * 2;
 	uint k = getKVal(L);
 	char* P = nullptr;
 
@@ -111,7 +111,7 @@ void MemoryAllocator::w_free(void* ptr)
 	setTag(L, true);
 	P = freeBlocks[k];
 	setLinkF(L, P);
-	if(P)
+	if (P)
 		setLinkB(P, L);
 	setKVal(L, k);
 	setLinkB(L, nullptr);
@@ -122,17 +122,17 @@ void MemoryAllocator::setTag(char* ptr, bool tag)
 {
 	if (tag)
 	{
-		*ptr |= (1 << 7);
+		*ptr |= CHAROFF;
 	}
 	else
 	{
-		*ptr &= ~(1 << 7);
+		*ptr &= CHAROFFINV;
 	}
 }
 
 bool MemoryAllocator::getTag(char* ptr)
 {
-	return (*ptr >> 7);
+	return (*ptr >> (sizeof(char) - 1));
 }
 
 char* MemoryAllocator::extractFreeBlock(int j)
@@ -149,46 +149,46 @@ char* MemoryAllocator::extractFreeBlock(int j)
 char* MemoryAllocator::getTween(char* ptr, int k)
 {
 	int x = ptr - heap;
-	int mod = x % (1 << k + 1);
+	int mod = x % (1ll << (k + 1));
 	if (mod)
 	{
-		return ptr - (1 << k);
+		return ptr - (1ll << k);
 	}
 	else
 	{
-		return ptr + (1 << k);
+		return ptr + (1ll << k);
 	}
 }
 
 uint MemoryAllocator::getKVal(char* ptr)
 {
-	return (unsigned char)((*ptr) & ((char)(~(1 << 7))));
+	return (unsigned char)((*ptr) & ((char)CHAROFFINV));
 }
 
 inline char* MemoryAllocator::getLinkB(char* ptr)
 {
-	return (char*)*((int*)(ptr + 1) + 1);
+	return (char*)(*(ptrdiff_t*)(ptr + sizeof(char) + sizeof(int*)));
 }
 
 inline char* MemoryAllocator::getLinkF(char* ptr)
 {
-	return (char*)*(int*)(ptr + 1);
+	return (char*)(*(ptrdiff_t*)(ptr + sizeof(char)));
 }
 
 inline void MemoryAllocator::setLinkB(char* ptr, char* linkb)
 {
-	*((int*)(ptr + 1) + 1) = (int)linkb;
+	*(ptrdiff_t*)(ptr + sizeof(char) + sizeof(int*)) = (ptrdiff_t)linkb;
 }
 
 inline void MemoryAllocator::setLinkF(char* ptr, char* linkf)
 {
-	*(int*)(ptr + 1) = (int)linkf;
+	*(ptrdiff_t*)(ptr + sizeof(char)) = (ptrdiff_t)linkf;
 }
 
 inline void MemoryAllocator::setKVal(char* ptr, uint k)
 {
-	bool bit = *ptr >> 7;
-	*ptr = k | (bit << 7);
+	bool bit = *ptr >> (sizeof(char) - 1);
+	*ptr = k | (bit << (sizeof(char) - 1));
 }
 
 int MemoryAllocator::getN() const

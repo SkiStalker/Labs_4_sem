@@ -1,10 +1,14 @@
 #pragma once
+#include <stdint.h>
 
 using uint = unsigned int;
 
 class MemoryAllocator
 {
 private:
+
+	const int CHAROFF = (1 << (sizeof(char) - 1));
+	const int CHAROFFINV = ~CHAROFF;
 
 	char** freeBlocks = nullptr;
 	uint getNormalizePow(uint size);

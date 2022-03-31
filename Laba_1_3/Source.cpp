@@ -18,7 +18,8 @@ void readLines(const string& path, vector<string> &lines)
 	{
 		string buf;
 		getline(in, buf);
-		lines.push_back(buf);
+		if(buf.length())
+			lines.push_back(buf);
 	}
 
 	in.close();

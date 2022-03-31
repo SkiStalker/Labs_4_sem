@@ -35,6 +35,7 @@ void Interpreter::interpret(const vector<string>& lines)
 		}
 		else if (regex_search(line.c_str(), res, regShowVar))
 		{
+			cout << "ShowVars:{" << endl;
 			for (auto& vars : varStacks)
 			{
 				for (auto& var : vars)
@@ -42,6 +43,7 @@ void Interpreter::interpret(const vector<string>& lines)
 					cout << var.first << " : " << var.second.sz << endl;
 				}
 			}
+			cout << "}" << endl;
 		}
 		else if (regex_search(line.c_str(), res, regOpenBreak))
 		{
@@ -50,6 +52,10 @@ void Interpreter::interpret(const vector<string>& lines)
 		else if (regex_search(line.c_str(), res, regCloseBreak))
 		{
 			extractLast();
+		}
+		else
+		{
+			cout << "Unknown command" << endl;
 		}
 	}
 }
