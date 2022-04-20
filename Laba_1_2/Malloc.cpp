@@ -176,9 +176,9 @@ char* getPrev(char* ptr)
 void setFree(char* ptr, bool val)
 {
 
-	*((int*)ptr) = *((int*)ptr) & TAGPOSINV | (val << INTOFF);
+	*((int*)ptr) = (* ((int*)ptr) & TAGPOSINV) | (val << INTOFF);
 	ptr += getSize(ptr) - sizeof(int);
-	*((int*)ptr) = *((int*)ptr) & TAGPOSINV | (val << INTOFF);
+	*((int*)ptr) = (* ((int*)ptr) & TAGPOSINV) | (val << INTOFF);
 }
 
 void setSize(char* ptr, int sz)
