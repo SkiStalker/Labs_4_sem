@@ -14,7 +14,7 @@ void Laba_3::showAuthor()
 
 void Laba_3::showAbout()
 {
-	QMessageBox::information(this, "About", "Laboratory work 2");
+	QMessageBox::information(this, "About", "Laboratory work 2 ");
 }
 
 void Laba_3::selectColorInversion()
@@ -60,6 +60,41 @@ void Laba_3::selectEqualizeHistogram()
 void Laba_3::selectNormalHistogram()
 {
 	tryChangeTransformation(Transformation::Normal);
+}
+
+void Laba_3::selectBoxFilter()
+{
+	tryChangeTransformation(Transformation::BoxFilter);
+}
+
+void Laba_3::selectMedianFilter()
+{
+	tryChangeTransformation(Transformation::MedianFilter);
+}
+
+void Laba_3::selectGausseFilter()
+{
+	tryChangeTransformation(Transformation::GausseFilter);
+}
+
+void Laba_3::selectSharpnessFilter()
+{
+	tryChangeTransformation(Transformation::SharpnessFilter);
+}
+
+void Laba_3::selectLaplasFilter()
+{
+	tryChangeTransformation(Transformation::LaplasFilter);
+}
+
+void Laba_3::selectSobelFilter()
+{
+	tryChangeTransformation(Transformation::SobelFilter);
+}
+
+void Laba_3::selectFourier()
+{
+	tryChangeTransformation(Transformation::Fourier);
 }
 
 void Laba_3::changeFirstSliderValue()
@@ -147,6 +182,27 @@ void Laba_3::applyTransformation()
 		break;
 	case Transformation::Normal:
 		ImageTransformer::normalFilter(curImg, ui.firstHSlider->value(), ui.secondHSlider->value());
+		break;
+	case Transformation::BoxFilter:
+		ImageTransformer::boxFilter(curImg);
+		break;
+	case Transformation::MedianFilter:
+		ImageTransformer::medianFilter(curImg);
+		break;
+	case Transformation::GausseFilter:
+		ImageTransformer::gausseFilter(curImg);
+		break;
+	case Transformation::SharpnessFilter:
+		ImageTransformer::sharpnessFilter(curImg);
+		break;
+	case Transformation::LaplasFilter:
+		ImageTransformer::laplasFilter(curImg);
+		break;
+	case Transformation::SobelFilter:
+		ImageTransformer::sobelFilter(curImg);
+		break;
+	case Transformation::Fourier:
+		ImageTransformer::fourierTransform(curImg, true);
 		break;
 	default:
 		break;
@@ -252,6 +308,14 @@ void Laba_3::setConnections()
 	connect(ui.actionNormal, &QAction::triggered, this, &Laba_3::selectNormalHistogram);
 	connect(ui.actionBrightnessThreshold, &QAction::triggered, this, &Laba_3::selectThresholdBrightness);
 
+	connect(ui.actionBox, &QAction::triggered, this, &Laba_3::selectBoxFilter);
+	connect(ui.actionMedian, &QAction::triggered, this, &Laba_3::selectMedianFilter);
+	connect(ui.actionGausse, &QAction::triggered, this, &Laba_3::selectGausseFilter);
+	connect(ui.actionSharpness, &QAction::triggered, this, &Laba_3::selectSharpnessFilter);
+	connect(ui.actionLaplas, &QAction::triggered, this, &Laba_3::selectLaplasFilter);
+	connect(ui.actionSobel, &QAction::triggered, this, &Laba_3::selectSobelFilter);
+	connect(ui.actionFourier, &QAction::triggered, this, &Laba_3::selectFourier);
+
 	connect(ui.firstHSlider, &QSlider::valueChanged, this, &Laba_3::changeFirstSliderValue);
 	connect(ui.secondHSlider, &QSlider::valueChanged, this, &Laba_3::changeSecondSliderValue);
 	connect(ui.thirdHSlider, &QSlider::valueChanged, this, &Laba_3::changeThirdSliderValue);
@@ -267,7 +331,8 @@ void Laba_3::setLabelAndSliders()
 	{
 	case Transformation::None: 	case Transformation::Inversion: case Transformation::ToBlackAndWhite:
 	case Transformation::LogBrightness: 	case Transformation::DegreeBrightness: 	case Transformation::LineBrightness:
-	case Transformation::Equalize:
+	case Transformation::Equalize: case Transformation::BoxFilter: case Transformation::MedianFilter: case Transformation::GausseFilter: 
+	case Transformation::SharpnessFilter: case Transformation::SobelFilter: case Transformation::Fourier: case Transformation::LaplasFilter:
 
 		ui.firstHSlider->setEnabled(false);
 		ui.firstLabel->setText("");

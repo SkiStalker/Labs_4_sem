@@ -29,6 +29,14 @@ public slots:
     void selectEqualizeHistogram();
     void selectNormalHistogram();
 
+    void selectBoxFilter();
+    void selectMedianFilter();
+    void selectGausseFilter();
+    void selectSharpnessFilter();
+    void selectLaplasFilter();
+    void selectSobelFilter();
+    void selectFourier();
+
     void changeFirstSliderValue();
     void changeSecondSliderValue();
     void changeThirdSliderValue();

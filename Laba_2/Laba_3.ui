@@ -342,8 +342,21 @@
     <addaction name="menuBrightness"/>
     <addaction name="menuHistogram"/>
    </widget>
+   <widget class="QMenu" name="menuFilter">
+    <property name="title">
+     <string>Filter</string>
+    </property>
+    <addaction name="actionBox"/>
+    <addaction name="actionMedian"/>
+    <addaction name="actionGausse"/>
+    <addaction name="actionSharpness"/>
+    <addaction name="actionLaplas"/>
+    <addaction name="actionSobel"/>
+    <addaction name="actionFourier"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTansformation"/>
+   <addaction name="menuFilter"/>
    <addaction name="menuAuthor"/>
    <addaction name="menuAbout"/>
   </widget>
@@ -418,6 +431,41 @@
   <action name="actionBrightnessThreshold">
    <property name="text">
     <string>Threshold</string>
+   </property>
+  </action>
+  <action name="actionBox">
+   <property name="text">
+    <string>Box</string>
+   </property>
+  </action>
+  <action name="actionMedian">
+   <property name="text">
+    <string>Median</string>
+   </property>
+  </action>
+  <action name="actionGausse">
+   <property name="text">
+    <string>Gausse</string>
+   </property>
+  </action>
+  <action name="actionSharpness">
+   <property name="text">
+    <string>Sharpness</string>
+   </property>
+  </action>
+  <action name="actionLaplas">
+   <property name="text">
+    <string>Laplas</string>
+   </property>
+  </action>
+  <action name="actionSobel">
+   <property name="text">
+    <string>Sobel</string>
+   </property>
+  </action>
+  <action name="actionFourier">
+   <property name="text">
+    <string>Fourier</string>
    </property>
   </action>
  </widget>

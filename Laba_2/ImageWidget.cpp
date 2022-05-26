@@ -24,16 +24,15 @@ QImage& ImageWidget::getImage() const
 
 bool ImageWidget::loadImage(const QString& path)
 {
-	if (!image->load(path))
+	if (!image->load(path, "jpg"))
 	{
 		repaint();
 		return false;
 	}
 	else
 	{
-		auto w = width();
-		auto h = height();
-		*image = image->scaled(width(), height(), Qt::KeepAspectRatio);
+		auto res = std::max(height(), width());
+		*image = image->scaled(std::min(256, res), std::min(256, res));
 		repaint();
 		return true;
 	}
